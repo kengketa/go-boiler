@@ -26,6 +26,10 @@ migrate-docker-down:
 docker:
 	@chmod -R 755 ./src/database/init
 	@docker-compose up --build
+up:
+	@docker compose up -d
+down:
+	@docker compose down
 docker-test:
 	@docker-compose up -d && make tests
 docker-down:

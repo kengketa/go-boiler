@@ -27,14 +27,10 @@ func NewHealthCheckService(db *gorm.DB) HealthCheckService {
 }
 
 func (s *healthCheckService) GormCheck() error {
-	sqlDB, errDB := s.DB.DB()
-	if errDB != nil {
-		s.Log.Errorf("failed to access the database connection pool: %v", errDB)
-		return errDB
-	}
-
-	if err := sqlDB.Ping(); err != nil {
-		s.Log.Errorf("failed to ping the database: %v", err)
+	// Check MySQL health status
+	var result int
+	if err := s.DB.Raw("SELECT 1").Scan(&result).Error; err != nil {
+		s.Log.Errorf("failed to execute health check query: %v", err)
 		return err
 	}
 
